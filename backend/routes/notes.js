@@ -39,7 +39,7 @@ router.post('/addnote', fetchuser, [
 
 })
 
-// Route 3: Update an Existing note using :POST "/api/auth/updatenote". Login required
+// Route 3: Update an Existing note using :POST "/api/notes/updatenote". Login required
 
 router.put('/updatenote/:id', fetchuser, async (req, res) => {
     const { title, description, tag } = req.body;
@@ -51,12 +51,18 @@ router.put('/updatenote/:id', fetchuser, async (req, res) => {
     if (tag) { newNote.tag = tag };
 
     // Find the note to be updated
-    let note = await Note.findById(req.param.id);
-    if (!note) { return res.status(404).send("not found") };
+    try {
+        // Find the note to be updated
+        let note = await Note.findById(req.params.id);
+        if (!note) { return res.status(404).send("not found") };
 
-    if (note.user.toString() !== req.user.id) {
-        return res.status(401).send("Not Allowed");
+        if (note.user.toString() !== req.user.id) {
+            return res.status(401).send("Not Allowed");
 
+        }
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
     }
 
     note = await Note.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true })
