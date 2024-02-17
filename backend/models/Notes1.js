@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
-
-const notesSchema = new schema({
+const { Schema } = mongoose;
+const notesSchema = new Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
     title: {
         type: String,
         required: true
@@ -17,7 +21,7 @@ const notesSchema = new schema({
     ,
     Date: {
         type: String,
-        default: date.now
+        default: Date.now
         // Here do not use date,now(). because it will be called immediately
         // Where Our requirement is to call this when object is actually inserted
     }
@@ -25,4 +29,4 @@ const notesSchema = new schema({
 
 })
 
-module.exports = mongoose.model("notes", notesSchema);
+module.exports = mongoose.model("Notes", notesSchema);
