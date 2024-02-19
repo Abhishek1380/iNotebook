@@ -70,4 +70,35 @@ router.put('/updatenote/:id', fetchuser, async (req, res) => {
 
 }
 )
+
+// Route 3: Update an Existing note using :Delete "/api/notes/deletenote". Login required
+
+router.delete('/deletenote', fetchuser, async (req, res) => {
+    const { title, description, tag } = req.body;
+
+    // Find the note to be updated
+    try {
+        // Find the note to be updated
+        let note = await Note.findById(req.params.id);
+        if (!note) { return res.status(404).send("not found") };
+
+        // Allow deletion only if user owns this note
+        if (note.user.toString() !== req.user.id) {
+            return res.status(401).send("Not Allowed");
+
+        }
+        note = await Note.findByIdAndDelete(req.params.id)
+        res.json({ "Success": "Note has been deleted" });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+
+
+
+}
+)
+
+
+
 module.exports = router;
