@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// const mongoURL = "mongodb://127.0.0.1:27017/iNotebook";
+// const mongoURL = "mongodb://127.0.0.1:27017";
 // We can manually add in which database we want to store data
 const mongoURL = "mongodb://127.0.0.1:27017/iNotebook";
 
